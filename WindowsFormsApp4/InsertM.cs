@@ -57,7 +57,7 @@ namespace WindowsFormsApp4
             }
         }
 
-        public void AddStudent(string firstName, string lastName, string middleName, DateTime dateOfBirth, string gender, string address, string phone, string note, int groupId)
+        public void AddStudent(string firstName, string lastName, string middleName, DateTime dateOfBirth, string gender, string address, string phone, string note, string telegram, int groupId)
         {
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -66,8 +66,8 @@ namespace WindowsFormsApp4
                 {
                     conn.Open();
 
-                    string queryStudents = "INSERT INTO students (full_name, surname, patronymic) VALUES (@FirstName, @LastName, @MiddleName); select last_insert_id();";
-                    string queryStudentInfo = "INSERT INTO student_info (student_id, dob, gender, address, phone, note) VALUES (@Student_ID, @DateOfBirth, @Gender, @Address, @Phone, @Note);";
+                    string queryStudents = "INSERT INTO students (name, surname, patronymic) VALUES (@FirstName, @LastName, @MiddleName); select last_insert_id();";
+                    string queryStudentInfo = "INSERT INTO student_info (student_id, dob, gender, address, phone, telegram, note) VALUES (@Student_ID, @DateOfBirth, @Gender, @Address, @Phone, @telegram, @Note);";
                     string queryStudentGroup = "INSERT INTO student_groups (student_id, group_id) VALUES (@Student_ID, @Group_ID);";
 
                     MySqlCommand cmd = new MySqlCommand(queryStudents, conn);
@@ -82,6 +82,7 @@ namespace WindowsFormsApp4
                     cmdInfo.Parameters.AddWithValue("@Gender", gender);
                     cmdInfo.Parameters.AddWithValue("@Address", address);
                     cmdInfo.Parameters.AddWithValue("@Phone", phone);
+                    cmdInfo.Parameters.AddWithValue("@telegram", telegram);
                     cmdInfo.Parameters.AddWithValue("@Note", note);
                     cmdInfo.ExecuteNonQuery();
 
@@ -99,7 +100,7 @@ namespace WindowsFormsApp4
 
         }
 
-        public void AddParentToStudent(int studentId, string fullName, string role, string address, string workplace, string position, string workPhone, string homePhone, string note)
+        public void AddParentToStudent(int studentId, string fullName, string role, string address, string workplace, string position, string workPhone, string homePhone, string telegram, string note)
         {
             // Строка подключения к базе даных
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -109,8 +110,8 @@ namespace WindowsFormsApp4
 
                 // Создание нового родителя в таблице 'parents'
                 string queryAddParent = @"
-            INSERT INTO parents (full_name, role, address, workplace, position, work_phone, home_phone, note)
-            VALUES (@FullName, @role, @Address, @Workplace, @Position, @WorkPhone, @HomePhone, @Note);
+            INSERT INTO parents (name, role, address, workplace, position, work_phone, home_phone, telegram, note)
+            VALUES (@FullName, @role, @Address, @Workplace, @Position, @WorkPhone, @HomePhone, @tell, @Note);
             SELECT LAST_INSERT_ID();"; // Получить ID нового родителя
 
                 MySqlCommand cmdAddParent = new MySqlCommand(queryAddParent, conn);
@@ -121,6 +122,7 @@ namespace WindowsFormsApp4
                 cmdAddParent.Parameters.AddWithValue("@Position", position);
                 cmdAddParent.Parameters.AddWithValue("@WorkPhone", workPhone);
                 cmdAddParent.Parameters.AddWithValue("@HomePhone", homePhone);
+                cmdAddParent.Parameters.AddWithValue("@tell", telegram);
                 cmdAddParent.Parameters.AddWithValue("@Note", note);
 
                 int parentId;
@@ -163,7 +165,7 @@ namespace WindowsFormsApp4
             {
                 connection.Open();
                 string query1 = @"
-              INSERT INTO teachers (full_name, username, password)
+              INSERT INTO teachers (name, username, password)
               VALUES (@fs, @un, @p);
               SELECT LAST_INSERT_ID();";
                 MySqlCommand cmd = new MySqlCommand(query1, connection);

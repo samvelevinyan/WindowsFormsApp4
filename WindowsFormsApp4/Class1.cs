@@ -91,7 +91,7 @@ namespace WindowsFormsApp4
 
         public void LoadStudentsForGroup(DataGridView dataGridView, string groupName)
         {
-            string query = "SELECT student_id, full_name FROM students WHERE group_name = @GroupName;";
+            string query = "SELECT student_id, name FROM students WHERE group_name = @GroupName;";
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -162,13 +162,14 @@ namespace WindowsFormsApp4
             string query = @"
             SELECT
                 s.student_id,
-                s.full_name AS Имя,
+                s.name AS Имя,
                 s.surname AS Фамилия,
                 s.patronymic AS Отчество,
                 sf.dob AS ДатаРождения,
                 sf.gender AS Пол,
                 sf.address AS Адрес,
                 sf.phone AS Телефон,
+                sf.telegram AS Телеграм,
                 sf.note AS Примечание
             FROM
                 students s
@@ -208,7 +209,7 @@ namespace WindowsFormsApp4
         {
             // SQL запрос для получения списка студентов по идентификатору группы
 
-            string query = "SELECT g.group_name, s.full_name+' 's.surname+' 's.patronymic FROM students s JOIN student_groups sg ON s.student_id = sg.student_id JOIN groups g ON sg.student.id = g.group_id WHERE g.group_name = @GroupName;";
+            string query = "SELECT g.group_name, s.name+' 's.surname+' 's.patronymic FROM students s JOIN student_groups sg ON s.student_id = sg.student_id JOIN groups g ON sg.student.id = g.group_id WHERE g.group_name = @GroupName;";
 
             DataTable dt = new DataTable();
             try
@@ -276,7 +277,7 @@ namespace WindowsFormsApp4
             string query = @"
               SELECT
               s.student_id,
-              CONCAT(s.surname, ' ', s.full_name, ' ', s.patronymic) AS FullName,
+              CONCAT(s.surname, ' ', s.name, ' ', s.patronymic) AS FullName,
               g.group_name
               FROM
               students s
@@ -322,7 +323,7 @@ namespace WindowsFormsApp4
             string query = @"
         SELECT
         t.teacher_id,
-        t.full_name
+        t.name
         FROM teachers t";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -342,7 +343,7 @@ namespace WindowsFormsApp4
                     // Проверка, содержит ли DataTable строки.
                     if (dt.Rows.Count > 0)
                     {
-                        comboBox.DisplayMember = "full_name"; // Отображаемое имя
+                        comboBox.DisplayMember = "name"; // Отображаемое имя
                         comboBox.ValueMember = "teacher_id"; // Значение
                         comboBox.DataSource = dt;
                     }
@@ -369,7 +370,7 @@ namespace WindowsFormsApp4
               SELECT
               s.student_id,
               s.surname,
-              s.full_name,
+              s.name,
               s.patronymic,
               g.group_name
               FROM
@@ -393,7 +394,7 @@ namespace WindowsFormsApp4
                         while (reader.Read())
                         {
                             // Формируем полное имя, объединяя три части
-                            string fullName = reader["full_name"].ToString() + " " +
+                            string fullName = reader["name"].ToString() + " " +
                                               reader["surname"].ToString() + " " +
                                               reader["patronymic"].ToString();
 
@@ -416,7 +417,7 @@ namespace WindowsFormsApp4
             string query = @"
             SELECT 
            p.parent_id AS РодительID,
-           p.full_name AS ФИО,
+           p.name AS ФИО,
            p.role AS Роль,
            p.address AS Адрес,
            p.workplace AS МестоРаботы,
@@ -461,6 +462,7 @@ namespace WindowsFormsApp4
             string query = @"
             SELECT 
            w.work_id AS НомерРаботы,
+           w.student_id AS НомерСтудента,
            w.parent_id AS НомерРодителя,
            w.type AS ТипОбщения,
            w.text AS ЧтоОбсуждалось
@@ -575,7 +577,7 @@ namespace WindowsFormsApp4
             string query = @"
                      SELECT 
                         t.teacher_id AS НомерУчителя,
-                        t.full_name AS ФИОУчителя,
+                        t.name AS ФИОУчителя,
                         t.username AS Логин,
                         t.password AS Пароль,
                         r.isAdmin AS Админ,
@@ -692,12 +694,12 @@ namespace WindowsFormsApp4
             string query = @"
         SELECT
         p.parent_id,
-        p.full_name
+        p.name
         FROM
         parents p
         JOIN studentparents sp ON p.parent_id = sp.ParentID
         WHERE sp.StudentID = @StudentID
-        ORDER BY p.full_name;";
+        ORDER BY p.name;";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -711,7 +713,7 @@ namespace WindowsFormsApp4
                     DataTable dt = new DataTable();
                     da.Fill(dt);
 
-                    comboBox.DisplayMember = "full_name"; // отображаемое имя
+                    comboBox.DisplayMember = "name"; // отображаемое имя
                     comboBox.ValueMember = "parent_id"; // значение
                     comboBox.DataSource = dt;
 

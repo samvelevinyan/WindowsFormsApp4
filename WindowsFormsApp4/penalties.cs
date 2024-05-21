@@ -18,6 +18,9 @@ namespace WindowsFormsApp4
         private DeleteM DeleteM;
         private DB db;
         string connectionString;
+
+        private int studentid;
+        private int zapisid;
         public penalties()
         {
             InitializeComponent();
@@ -26,15 +29,17 @@ namespace WindowsFormsApp4
             SelectM = new Class1(connectionString);
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
-            SelectM.LoadYears(comboBox1);
+            SelectM.LoadYears(guna2ComboBox1);
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+       
+
+        private void guna2ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                string selectedGroup = comboBox1.SelectedItem.ToString();
-                SelectM.LoadGroupsForYear(comboBox2, selectedGroup);
+                string selectedGroup = guna2ComboBox1.SelectedItem.ToString();
+                SelectM.LoadGroupsForYear(guna2ComboBox2, selectedGroup);
             }
             catch (Exception ex)
             {
@@ -42,29 +47,13 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string selectedGroup = comboBox2.SelectedItem.ToString();
-            
-            try
-            {
-                SelectM.FillComboBoxWithStudents(comboBox3, selectedGroup);
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+            string selectedGroup = guna2ComboBox2.SelectedItem.ToString();
 
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           
             try
             {
-                string selectedGroup = comboBox2.SelectedItem.ToString();
-                SelectM.FillComboBoxWithStudents(comboBox5, selectedGroup);
-                SelectM.DisplayPenalties(dataGridView1, Convert.ToInt32(comboBox3.SelectedValue));
+                SelectM.FillComboBoxWithStudents(guna2ComboBox3, selectedGroup);
 
             }
             catch (Exception ex)
@@ -73,19 +62,15 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void guna2ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            addNewPenalt addNewPenalt = new addNewPenalt();
-            addNewPenalt.ShowDialog(); 
-            this.Visible = true; 
-        }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
             try
             {
-                UpdateMcs.PenaltDate(dateTimePicker1.Value, Convert.ToInt32(comboBox5.SelectedValue));
-                SelectM.DisplayPenalties(dataGridView1, Convert.ToInt32(comboBox3.SelectedValue));
+                string selectedGroup = guna2ComboBox2.SelectedItem.ToString();
+
+                SelectM.DisplayPenalties(dataGridView2, Convert.ToInt32(guna2ComboBox3.SelectedValue));
+
             }
             catch (Exception ex)
             {
@@ -93,32 +78,44 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void guna2Button3_Click(object sender, EventArgs e)
         {
-            try
+            if (zapisid <= 0)
             {
-                UpdateMcs.PenaltDescr(textBox1.Text, Convert.ToInt32(comboBox5.SelectedValue));
-                SelectM.DisplayPenalties(dataGridView1, Convert.ToInt32(comboBox3.SelectedValue));
+                MessageBox.Show("Выберите номер запси в таблице!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception ex)
+            addNewPenalt addNewPenalt = new addNewPenalt(zapisid, studentid);
+            addNewPenalt.ShowDialog();
+            this.Visible = true;
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView2.CurrentRow.Selected = true;
+                    zapisid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
+                    studentid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
+                    MessageBox.Show($"Вы выбрали запись №{zapisid} и студента №{studentid} ");
+                }
             }
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void iconButton2_Click(object sender, EventArgs e)
         {
-
+            this.WindowState = FormWindowState.Minimized;
         }
 
-        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        private void iconButton1_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
     }
 }

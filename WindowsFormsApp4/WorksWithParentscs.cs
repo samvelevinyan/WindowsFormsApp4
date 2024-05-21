@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Guna.UI2.WinForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +19,10 @@ namespace WindowsFormsApp4
         private DeleteM DeleteM;
         private DB db;
         string connectionString;
+
+        private int workid = 0;
+        private int studentid;
+        private int parentid;
         public WorksWithParentscs()
         {
             InitializeComponent();
@@ -26,15 +31,15 @@ namespace WindowsFormsApp4
             SelectM = new Class1(connectionString);
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
-            SelectM.LoadYears(comboBox1);
+            SelectM.LoadYears(guna2ComboBox1);
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                string selectedGroup = comboBox1.SelectedItem.ToString();
-                SelectM.LoadGroupsForYear(comboBox2, selectedGroup);
+                string selectedGroup = guna2ComboBox1.SelectedItem.ToString();
+                SelectM.LoadGroupsForYear(guna2ComboBox2, selectedGroup);
             }
             catch (Exception ex)
             {
@@ -42,17 +47,17 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string selectedGroup = comboBox2.SelectedItem.ToString();
-            int studentId = Convert.ToInt32(comboBox3.SelectedValue);
+            string selectedGroup = guna2ComboBox2.SelectedItem.ToString();
+            int studentId = Convert.ToInt32(guna2ComboBox3.SelectedValue);
             //  dataGridView1.DataSource = SelectM.GetInfoByGroup(selectedGroup);
 
             try
             {
-                SelectM.FillComboBoxWithStudents(comboBox3, selectedGroup);
-                SelectM.FillComboBoxWithStudents(comboBox5, selectedGroup);
-                
+                SelectM.FillComboBoxWithStudents(guna2ComboBox3, selectedGroup);
+
+
 
                 // SelectM.FillComboBoxWithStudents(comboBox6, selectedGroup);
                 // SelectM.FillComboBoxWithStudentsName(comboBox4, selectedGroup);
@@ -64,84 +69,86 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void label2_Click(object sender, EventArgs e)
         {
-            if (comboBox3.SelectedValue != null)
+
+        }
+
+        private void guna2ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (guna2ComboBox3.SelectedValue != null)
             {
-                int studentId = Convert.ToInt32(comboBox3.SelectedValue);
-                SelectM.FillComboBoxWithParents(comboBox4, studentId);
-                SelectM.FillComboBoxWithParents(comboBox6, studentId);
-                SelectM.DisplayWorkWithParentInfo(dataGridView1, Convert.ToInt32(comboBox4.SelectedValue));
+                int studentId = Convert.ToInt32(guna2ComboBox3.SelectedValue);
+                SelectM.FillComboBoxWithParents(guna2ComboBox4, studentId);
+
+                SelectM.DisplayWorkWithParentInfo(dataGridView2, Convert.ToInt32(guna2ComboBox4.SelectedValue));
             }
         }
 
-        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2ComboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                SelectM.DisplayWorkWithParentInfo(dataGridView1, Convert.ToInt32(comboBox4.SelectedValue));
+                SelectM.DisplayWorkWithParentInfo(dataGridView2, Convert.ToInt32(guna2ComboBox4.SelectedValue));
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Произошла ошибка: {ex.Message}");
             }
-           
         }
 
-        private void WorksWithParentscs_Load(object sender, EventArgs e)
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
-        }
-
-        private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            AddWorkWithParent f2 = new AddWorkWithParent(); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
-            
-            f2.ShowDialog(); //запуск второй формы. Дальнейший код не сработает, пока не закроется форма
-            this.Visible = true; //показать форму
-        }
-
-        private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int studentId = Convert.ToInt32(comboBox5.SelectedValue);
-            SelectM.FillComboBoxWithParents(comboBox6, studentId);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            try
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                UpdateMcs.WorkWithParentType(comboBox7.SelectedItem.ToString(), Convert.ToInt32(comboBox6.SelectedValue));
-                SelectM.DisplayWorkWithParentInfo(dataGridView1, Convert.ToInt32(comboBox4.SelectedValue));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка обновления данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView2.CurrentRow.Selected = true;
+                    workid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
+                    parentid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[2].Value);
+                    studentid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
+                    MessageBox.Show($"Вы выбрали запись под номером {workid}, номер студента {studentid}, номер родителя {parentid}");
+                }
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void guna2Button3_Click(object sender, EventArgs e)
         {
-            try
+            if (workid <= 0)
             {
-                UpdateMcs.WorkWithParentText(textBox1.Text, Convert.ToInt32(comboBox6.SelectedValue));
-                SelectM.DisplayWorkWithParentInfo(dataGridView1, Convert.ToInt32(comboBox4.SelectedValue));
+                MessageBox.Show("Выберите запись в таблице", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка обновления данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            AddWorkWithParent f2 = new AddWorkWithParent(workid, studentid, parentid); 
+
+            f2.ShowDialog(); 
+            this.Visible = true; 
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2GroupBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void iconButton2_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

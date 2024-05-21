@@ -19,23 +19,43 @@ namespace WindowsFormsApp4
         private DeleteM DeleteM;
         private DB db;
         string connectionString;
-        public addNewPenalt()
+
+        int zid;
+        int sid;
+        public addNewPenalt(int zid, int studentid)
         {
             InitializeComponent();
             db = new DB();
+            this.zid = zid;
+            sid = studentid;
             connectionString = db.connectionString;
             SelectM = new Class1(connectionString);
             InsertM = new InsertM(connectionString);
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
-            SelectM.LoadYears(comboBox1);
+            SelectM.DisplayPenalties(dataGridView2, studentid);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView2.CurrentRow.Selected = true;
+                    zid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
+                    sid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
+                    MessageBox.Show($"Вы выбрали запись №{zid} и студента №{sid} ");
+                }
+            }
+        }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
         {
             try
             {
-                InsertM.Penalties(Convert.ToInt32(comboBox3.SelectedValue), dateTimePicker1.Value, textBox2.Text);
+                InsertM.Penalties(sid, guna2DateTimePicker1.Value, guna2TextBox4.Text);
+                SelectM.DisplayPenalties(dataGridView2, sid);
             }
             catch (Exception ex)
             {
@@ -43,38 +63,20 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2Button1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string selectedYear = comboBox1.SelectedItem.ToString();
-                SelectM.LoadGroupsForYear(comboBox2, selectedYear);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}");
-            }
+            UpdateMcs.UpdatePenaltinfo(zid, sid, guna2DateTimePicker1.Value, guna2TextBox4.Text);
+            SelectM.DisplayPenalties(dataGridView2, sid);
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void iconButton2_Click(object sender, EventArgs e)
         {
-            string selectedGroup = comboBox2.SelectedItem.ToString();
-            
-
-            try
-            {
-                SelectM.FillComboBoxWithStudents(comboBox3, selectedGroup);
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}");
-            }
+            this.WindowState = FormWindowState.Minimized;
         }
 
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void iconButton1_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
     }
 }

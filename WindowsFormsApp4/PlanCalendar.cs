@@ -29,27 +29,16 @@ namespace WindowsFormsApp4
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
 
-            SelectM.LoadYears(comboBox1);
+            SelectM.LoadYears(guna2ComboBox2);
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            AddPlanCalendarcs addNewPenalt = new AddPlanCalendarcs();
-            addNewPenalt.ShowDialog();
-            this.Visible = true;
-        }
+        
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SelectM.LoadGroupsForYear(comboBox2, comboBox1.SelectedItem.ToString());
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                SelectM.DisplayPlanCalendar(dataGridView1, SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString()));
-                SelectM.FillComboBoxWithStudentsName(comboBox3, comboBox2.SelectedItem.ToString());
+                SelectM.DisplayPlanCalendar(dataGridView2, SelectM.GetGroupIdByName(guna2ComboBox2.SelectedItem.ToString()));
             }
             catch (Exception ex)
             {
@@ -57,123 +46,46 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void label10_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void guna2Button3_Click(object sender, EventArgs e)
+        {
+            if (guna2ComboBox2.SelectedIndex == -1)
+            {
+                MessageBox.Show("Выберите группу!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            AddPlanCalendarcs addNewPenalt = new AddPlanCalendarcs(SelectM.GetGroupIdByName(guna2ComboBox2.SelectedItem.ToString()), guna2ComboBox2.SelectedItem.ToString());
+            addNewPenalt.ShowDialog();
+            this.Visible = true;
+        }
+
+        private void guna2ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectM.LoadGroupsForYear(guna2ComboBox2, guna2ComboBox1.SelectedItem.ToString());
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
 
-        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void iconButton2_Click(object sender, EventArgs e)
         {
-
+            this.WindowState = FormWindowState.Minimized;
         }
 
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void iconButton1_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            int groupID = SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString());
-            UpdateMcs.PlatDateStart(dateTimePicker1.Value, groupID);
-            SelectM.DisplayPlanCalendar(dataGridView1, groupID);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            int groupID = SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString());
-            UpdateMcs.PlatDateEnd(dateTimePicker2.Value, groupID);
-            SelectM.DisplayPlanCalendar(dataGridView1, groupID);
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            int groupID = SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString());
-            UpdateMcs.PlanIspolnitel(comboBox3.SelectedItem.ToString(), groupID);
-            SelectM.DisplayPlanCalendar(dataGridView1, groupID);
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            int groupID = SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString());
-            UpdateMcs.PenaltDescr(textBox1.Text, groupID);
-            SelectM.DisplayPlanCalendar(dataGridView1, groupID);
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            int groupID = SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString());
-            UpdateMcs.PlanResult(textBox2.Text, groupID);
-            SelectM.DisplayPlanCalendar(dataGridView1, groupID);
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            int groupID = SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString());
-            UpdateMcs.PlanProtokol(textBox3.Text, groupID);
-            SelectM.DisplayPlanCalendar(dataGridView1, groupID);
-        }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            int groupID = SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString());
-            UpdateMcs.PlanComment(textBox4.Text, groupID);
-            SelectM.DisplayPlanCalendar(dataGridView1, groupID);
+            this.Close();
         }
     }
 }

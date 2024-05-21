@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,23 +19,44 @@ namespace WindowsFormsApp4
         private DeleteM DeleteM;
         private DB db;
         string connectionString;
-        public AddIndividualWorkcs()
+        int sid;
+        int zid;
+        public AddIndividualWorkcs(int studentid, int workid)
         {
             InitializeComponent();
+            sid = studentid;
+            zid = workid;
             db = new DB();
             connectionString = db.connectionString;
             SelectM = new Class1(connectionString);
             InsertM = new InsertM(connectionString);
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
-            SelectM.LoadYears(comboBox1);
+            SelectM.DisplayIndividual(dataGridView2, studentid);
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView2.CurrentRow.Selected = true;
+                    sid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
+                    zid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
+                    MessageBox.Show($"Вы выбрали студента №{sid} и запись №{zid}");
+                }
+            }
+        }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
         {
             try
             {
-                InsertM.Individual(Convert.ToInt32(comboBox3.SelectedValue), dateTimePicker1.Value, textBox2.Text);
+
+                InsertM.Individual(sid, guna2DateTimePicker1.Value, guna2TextBox4.Text);
+                SelectM.DisplayIndividual(dataGridView2, sid);
             }
             catch (Exception ex)
             {
@@ -42,13 +64,12 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2Button1_Click(object sender, EventArgs e)
         {
             try
             {
-                string selectedYear = comboBox1.SelectedItem.ToString();
-                SelectM.LoadGroupsForYear(comboBox2, selectedYear);
-                
+                UpdateMcs.UpdateIndWorkinfo(zid, sid, guna2DateTimePicker1.Value, guna2TextBox4.Text);
+                SelectM.DisplayIndividual(dataGridView2, sid);
             }
             catch (Exception ex)
             {
@@ -56,20 +77,14 @@ namespace WindowsFormsApp4
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void iconButton2_Click(object sender, EventArgs e)
         {
-            string selectedGroup = comboBox2.SelectedItem.ToString();
+            this.WindowState = FormWindowState.Minimized;
+        }
 
-
-            try
-            {
-                SelectM.FillComboBoxWithStudents(comboBox3, selectedGroup);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}");
-            }
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

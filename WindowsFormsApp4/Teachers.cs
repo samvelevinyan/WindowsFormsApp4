@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Guna.UI2.WinForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,8 @@ namespace WindowsFormsApp4
         private UpdateMcs UpdateMcs;
         private DeleteM DeleteM;
         private DB db;
+
+        int tid;
         
         string connectionString;
         public Teachers()
@@ -27,69 +30,41 @@ namespace WindowsFormsApp4
             SelectM = new Class1(connectionString);
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
-            SelectM.DisplayTeachers(dataGridView1);
-            SelectM.FillComboBoxWithTeachers(comboBox1);
-
+            SelectM.DisplayTeachers(dataGridView2);
             
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+       
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
-            
+            if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                dataGridView2.CurrentRow.Selected = true;
+                tid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
+                MessageBox.Show("Вы выбрали учителя под номером: " + tid);
+            }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2Button3_Click(object sender, EventArgs e)
         {
-
+            if (tid <= 0)
+            {
+                MessageBox.Show("Выберите учителя!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            AddTeacher f2 = new AddTeacher(tid);
+            f2.ShowDialog(); 
+            this.Visible = true; 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void iconButton2_Click(object sender, EventArgs e)
         {
-            AddTeacher f2 = new AddTeacher(); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к нейthis.Hide(); //второй вариант скрытия текущей формы
-            f2.ShowDialog(); //запуск второй формы. Дальнейший код не сработает, пока не закроется форма
-            this.Visible = true; //показать форму
+            this.WindowState = FormWindowState.Minimized;
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void iconButton1_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            UpdateMcs.TeacherFIO(textBox1.Text, (Convert.ToInt32(comboBox1.SelectedValue)));
-            SelectM.DisplayTeachers(dataGridView1);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            UpdateMcs.TeacherLogin(textBox2.Text, (Convert.ToInt32(comboBox1.SelectedValue)));
-            SelectM.DisplayTeachers(dataGridView1);
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            UpdateMcs.TeacherPass(textBox3.Text, (Convert.ToInt32(comboBox1.SelectedValue)));
-            SelectM.DisplayTeachers(dataGridView1);
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            UpdateMcs.TeacherRoleAdmin(checkBox1.Checked, (Convert.ToInt32(comboBox1.SelectedValue)));
-            SelectM.DisplayTeachers(dataGridView1);
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            UpdateMcs.TeacherRoleModer(checkBox2.Checked, (Convert.ToInt32(comboBox1.SelectedValue)));
-            SelectM.DisplayTeachers(dataGridView1);
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            UpdateMcs.TeacherRoleViewer(checkBox3.Checked, (Convert.ToInt32(comboBox1.SelectedValue)));
-            SelectM.DisplayTeachers(dataGridView1);
+            this.Close();
         }
     }
 }

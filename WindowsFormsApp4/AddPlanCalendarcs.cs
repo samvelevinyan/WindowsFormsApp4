@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,46 +15,83 @@ namespace WindowsFormsApp4
     {
         private InsertM InsertM;
         private Class1 SelectM;
+        private UpdateMcs UpdateM;
         private DB db;
         private string connectionString;
-        public AddPlanCalendarcs()
+        int gid;
+        int sid;
+        int zid;
+        public AddPlanCalendarcs(int groupid, string groupname)
         {
             InitializeComponent();
             db = new DB();
-            connectionString = db.connectionString; 
+            gid = groupid;
+            connectionString = db.connectionString;
             InsertM = new InsertM(connectionString);
+            UpdateM = new UpdateMcs(connectionString);
             SelectM = new Class1(connectionString);
-            SelectM.LoadYears(comboBox1);
+
+            SelectM.DisplayPlanCalendar(dataGridView2, gid);
+            SelectM.FillComboBoxWithStudentsName(guna2ComboBox2, groupname);
+          
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            InsertM.PlanCalendar(SelectM.GetGroupIdByName(comboBox2.SelectedItem.ToString()), dateTimePicker1.Value, dateTimePicker2.Value, comboBox3.SelectedItem.ToString(), textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text);
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView2.CurrentRow.Selected = true;
+                    sid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
+                    zid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
+                    MessageBox.Show($"Вы выбрали группу №{sid} и запись №{zid}");
+                }
+            }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2Button2_Click(object sender, EventArgs e)
         {
-            try
+            string combo2 = "";
+
+
+            if (guna2ComboBox2.SelectedIndex != -1)
             {
-                SelectM.LoadGroupsForYear(comboBox2, comboBox1.SelectedItem.ToString());
+                combo2 = guna2ComboBox2.SelectedItem.ToString();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}");
-            }
-            
+            InsertM.PlanCalendar(gid, guna2DateTimePicker1.Value, guna2DateTimePicker2.Value, combo2, guna2TextBox7.Text, guna2TextBox6.Text, guna2TextBox5.Text, guna2TextBox4.Text);
+            SelectM.DisplayPlanCalendar(dataGridView2, gid);
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void guna2Button1_Click(object sender, EventArgs e)
         {
-            try
+            if (sid <= 0)
             {
-                SelectM.FillComboBoxWithStudentsName(comboBox3, comboBox2.SelectedItem.ToString());
+                MessageBox.Show("Выберите группу в таблице!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            catch (Exception ex)
+
+            string combo = "";
+
+
+            if (guna2ComboBox2.SelectedIndex != -1)
             {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}");
+                combo = guna2ComboBox2.SelectedItem.ToString();
             }
+
+            UpdateM.UpdatePlanCalendar(zid, guna2DateTimePicker1.Value, guna2DateTimePicker2.Value, combo, guna2TextBox7.Text, guna2TextBox6.Text, guna2TextBox5.Text, guna2TextBox4.Text);
+            SelectM.DisplayPlanCalendar(dataGridView2, gid);
+        }
+
+        private void iconButton3_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
