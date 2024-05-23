@@ -23,9 +23,9 @@ namespace WindowsFormsApp4
         private DB db;
         private string connectionString;
         string gn;
-
+        string year;
         bool admin, moder, viwer;
-        public AddGroup(string groupname, bool admin, bool moder, bool viewer)
+        public AddGroup(string groupname, bool admin, bool moder, bool viewer, string year)
         {
             InitializeComponent();
             db = new DB();
@@ -36,11 +36,13 @@ namespace WindowsFormsApp4
             DeleteM = new DeleteM(connectionString);
             SelectM = new Class1(connectionString);
             //  SelectM.LoadYearsComboBox(comboBox1);
-            dataGridView2.DataSource = SelectM.GetInfoByGroup(groupname);
+            //dataGridView2.DataSource = SelectM.GetInfoByGroup(groupname);
+            SelectM.GetInfoByGroupByYear(dataGridView2, year);
             SelectM.FillComboBoxWithStudentsName(guna2ComboBox1, groupname);
             SelectM.FillComboBoxWithStudentsName(guna2ComboBox2, groupname);
             gn = groupname;
 
+            this.year = year;
             this.admin = admin;
             this.moder = moder;
             this.viwer = viewer;
@@ -62,13 +64,15 @@ namespace WindowsFormsApp4
             }
 
             UpdateMcs.UpdateGroupInfo(SelectM.GetGroupIdByName(gn), guna2TextBox1.Text, guna2TextBox2.Text, combo, combo2, guna2TextBox3.Text);
-            dataGridView2.DataSource = SelectM.GetInfoByGroup(gn);
+            // dataGridView2.DataSource = SelectM.GetInfoByGroup(gn);
+            SelectM.GetInfoByGroupByYear(dataGridView2, year);
         }
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
             InsertM.AddNewGroup(guna2TextBox5.Text, guna2TextBox4.Text);
-            dataGridView2.DataSource = SelectM.GetInfoByGroup(gn);
+            //  dataGridView2.DataSource = SelectM.GetInfoByGroup(gn);
+            SelectM.GetInfoByGroupByYear(dataGridView2, year);
         }
 
         private void guna2Button3_Click(object sender, EventArgs e)
@@ -79,13 +83,19 @@ namespace WindowsFormsApp4
             if (result == DialogResult.Yes)
             {
                 DeleteM.RemoveGroup(SelectM.GetGroupIdByName(selectedGroup));
-                dataGridView2.DataSource = SelectM.GetInfoByGroup(gn);
+                //  dataGridView2.DataSource = SelectM.GetInfoByGroup(gn);
+                SelectM.GetInfoByGroupByYear(dataGridView2, year);
                 MessageBox.Show("Группа успешно удалено.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 MessageBox.Show("Действие отменено.", "Отмена", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
         private void iconButton1_Click(object sender, EventArgs e)

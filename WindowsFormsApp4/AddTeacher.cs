@@ -30,9 +30,11 @@ namespace WindowsFormsApp4
             SelectM = new Class1(connectionString);
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
+
+            SelectM.DisplayTeachers(dataGridView2);
         }
 
-       
+
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
@@ -53,11 +55,15 @@ namespace WindowsFormsApp4
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                dataGridView2.CurrentRow.Selected = true;
-                tid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
-                MessageBox.Show("Вы выбрали учителя под номером: " + tid);
+                if (dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView2.CurrentRow.Selected = true;
+                    tid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
+                    string tname = dataGridView2.Rows[e.RowIndex].Cells[1].Value.ToString();
+                    MessageBox.Show($"Вы выбрали учителя {tname}");
+                }
             }
         }
 

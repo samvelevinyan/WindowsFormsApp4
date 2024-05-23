@@ -19,7 +19,7 @@ namespace WindowsFormsApp4
         private InsertM InsertM;
         private DB db;
         string connectionString;
-        public PlanCalendar()
+        public PlanCalendar(bool isadmin, bool ismoderator, bool isviewer)
         {
             InitializeComponent();
             db = new DB();
@@ -29,10 +29,16 @@ namespace WindowsFormsApp4
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
 
-            SelectM.LoadYears(guna2ComboBox2);
+            SelectM.LoadYears(guna2ComboBox1);
+
+            if (isadmin == false || ismoderator == false)
+            {
+                guna2Button3.Enabled = false;
+
+            }
         }
 
-        
+
 
         private void guna2ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {

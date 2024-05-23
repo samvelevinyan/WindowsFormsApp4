@@ -113,7 +113,56 @@ namespace WindowsFormsApp4
             }
         }
 
-        public DataTable GetInfoByGroup(string groupName)
+        public DataTable GetInfoByGroupByYear(DataGridView datagridview, string year)
+        {
+            // SQL запрос для получения списка студентов по идентификатору группы
+
+            string query = @"
+            SELECT
+                g.group_id,
+                g.group_name AS ИмяГруппы,
+                g.year AS Год, 
+                g.starosta AS Староста,
+                g.fizorg AS ФизОрг,
+                g.note AS Примечание
+            FROM
+                groups g
+            WHERE
+                g.year = @GroupName";
+
+
+
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    // Параметризация запроса для защиты от SQL инъекций
+                    command.Parameters.AddWithValue("@GroupName", year);
+
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                    adapter.Fill(dt);
+
+                    datagridview.DataSource = dt;
+                    datagridview.Columns[0].Visible = false;
+                    datagridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                    if (datagridview.Rows.Count == 0 || (datagridview.Rows.Count == 1 && datagridview.Rows[0].IsNewRow))
+                    {
+                        MessageBox.Show($"Группы за академ.год {year} не найдены.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка загрузки студентов: {ex.Message}");
+            }
+            return dt;
+        }
+
+        public DataTable GetInfoByGroup(DataGridView datagridview, string groupName)
         {
             // SQL запрос для получения списка студентов по идентификатору группы
 
@@ -144,6 +193,15 @@ namespace WindowsFormsApp4
 
                     MySqlDataAdapter adapter = new MySqlDataAdapter(command);
                     adapter.Fill(dt);
+
+                    datagridview.DataSource = dt;
+                    datagridview.Columns[0].Visible = false;
+                    datagridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                    if (datagridview.Rows.Count == 0 || (datagridview.Rows.Count == 1 && datagridview.Rows[0].IsNewRow))
+                    {
+                        MessageBox.Show($"Информация о группе {groupName} отсутсвует.");
+                    }
                 }
             }
             catch (Exception ex)
@@ -155,7 +213,7 @@ namespace WindowsFormsApp4
 
 
 
-        public DataTable GetStudentsByGroup(string groupName)
+        public DataTable GetStudentsByGroup(DataGridView datagridview, string groupName)
         {
             // SQL запрос для получения списка студентов по идентификатору группы
 
@@ -196,6 +254,15 @@ namespace WindowsFormsApp4
 
                     MySqlDataAdapter adapter = new MySqlDataAdapter(command);
                     adapter.Fill(dt);
+
+                    datagridview.DataSource = dt;
+                    datagridview.Columns[0].Visible = false;
+                    datagridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                    if (datagridview.Rows.Count == 0 || (datagridview.Rows.Count == 1 && datagridview.Rows[0].IsNewRow))
+                    {
+                        MessageBox.Show($"Студенты группы {groupName} отсутствуют");
+                    }
                 }
             }
             catch (Exception ex)
@@ -442,6 +509,8 @@ namespace WindowsFormsApp4
                     da.Fill(dt);
 
                     dataGridView.DataSource = dt;
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     if (dt.Rows.Count == 0)
                     {
@@ -482,6 +551,10 @@ namespace WindowsFormsApp4
                     da.Fill(dt);
 
                     dataGridView.DataSource = dt;
+                   
+                    dataGridView.Columns[1].Visible = false;
+                    dataGridView.Columns[2].Visible = false;
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     if (dt.Rows.Count == 0)
                     {
@@ -501,9 +574,11 @@ namespace WindowsFormsApp4
                      SELECT 
                         p.info_id AS НомерЗаписи,
                         p.student_id AS НомерСтудента,
+                        CONCAT(s.surname, ' ', s.name, ' ', s.patronymic) AS ФИО,
                         p.date AS Дата,
-                         p.description AS ОписаниеСобытия
+                        p.description AS ОписаниеСобытия
                      FROM penaltiesandincentives p
+                     JOIN students s ON p.student_id = s.student_id
                      WHERE p.student_id = @StudentID;";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -520,9 +595,14 @@ namespace WindowsFormsApp4
 
                     dataGridView.DataSource = dt;
 
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.Columns[1].Visible = false;
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
                     if (dt.Rows.Count == 0)
                     {
                         MessageBox.Show("Данные о записях взыскания и поощрения не найдены", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        
                     }
                 }
                 catch (Exception ex)
@@ -540,9 +620,11 @@ namespace WindowsFormsApp4
                      SELECT 
                         p.work_id AS НомерЗаписи,
                         p.student_id AS НомерСтудента,
+                        CONCAT(s.surname, ' ', s.name, ' ', s.patronymic) AS ФИО,
                         p.date AS Дата,
                         p.description AS ОписаниеСобытия
                      FROM individual_work p
+                     JOIN students s ON p.student_id = s.student_id
                      WHERE p.student_id = @StudentID;";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -558,6 +640,10 @@ namespace WindowsFormsApp4
                     da.Fill(dt);
 
                     dataGridView.DataSource = dt;
+
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.Columns[1].Visible = false;
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     if (dt.Rows.Count == 0)
                     {
@@ -598,6 +684,8 @@ namespace WindowsFormsApp4
                     da.Fill(dt);
 
                     dataGridView.DataSource = dt;
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     if (dt.Rows.Count == 0)
                     {
@@ -618,8 +706,9 @@ namespace WindowsFormsApp4
 
             string query = @"
                      SELECT 
-                        p.plan_id AS НомерПлана,
+                        p.plan_id AS НомерЗаписи,
                         p.group_id AS НомерГруппы,
+                        g.group_name AS ИмяГруппы,
                         p.date_start AS ДатаНачало,
                         p.date_end AS ДатаКонец,
                         p.ispolnitel AS Исполнитель,
@@ -628,6 +717,7 @@ namespace WindowsFormsApp4
                         p.protokol_number AS НомерПротокола,
                         p.comment AS Комментарий
                      FROM calendar_plan p
+                     JOIN groups g ON p.group_id = g.group_id
                      WHERE p.group_id = @groupID;";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -643,6 +733,9 @@ namespace WindowsFormsApp4
                     da.Fill(dt);
 
                     dataGridView.DataSource = dt;
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.Columns[1].Visible = false;
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     if (dt.Rows.Count == 0)
                     {
@@ -656,6 +749,7 @@ namespace WindowsFormsApp4
             }
         }
 
+        
         public int GetGroupIdByName(string groupName)
         {
             string query = "SELECT group_id FROM groups WHERE group_name = @groupName;";

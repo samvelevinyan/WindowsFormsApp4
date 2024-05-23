@@ -38,7 +38,7 @@ namespace WindowsFormsApp4
 
             if (personalData.IsAdmin == false || personalData.IsViewer == false)
             {
-                // button6.Enabled = false;
+                 guna2Button5.Enabled = false;
             }
         }
 
@@ -52,7 +52,7 @@ namespace WindowsFormsApp4
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            WorksWithParentscs f2 = new WorksWithParentscs(); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
+            WorksWithParentscs f2 = new WorksWithParentscs(isadmin, ismoderator, isviewer); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
             this.Hide(); //второй вариант скрытия текущей формы
             f2.ShowDialog(); //запуск второй формы. Дальнейший код не сработает, пока не закроется форма
             this.Visible = true; //показать форму
@@ -60,7 +60,7 @@ namespace WindowsFormsApp4
 
         private void guna2Button3_Click(object sender, EventArgs e)
         {
-            penalties f2 = new penalties(); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
+            penalties f2 = new penalties(isadmin, ismoderator, isviewer); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
             this.Hide(); //второй вариант скрытия текущей формы
             f2.ShowDialog(); //запуск второй формы. Дальнейший код не сработает, пока не закроется форма
             this.Visible = true; //показать форму
@@ -73,7 +73,7 @@ namespace WindowsFormsApp4
 
         private void guna2Button6_Click(object sender, EventArgs e)
         {
-            IndividualWork f2 = new IndividualWork(); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
+            IndividualWork f2 = new IndividualWork(isadmin, ismoderator, isviewer); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
             this.Hide(); //второй вариант скрытия текущей формы
             f2.ShowDialog(); //запуск второй формы. Дальнейший код не сработает, пока не закроется форма
             this.Visible = true; //показать форму
@@ -81,7 +81,7 @@ namespace WindowsFormsApp4
 
         private void guna2Button4_Click(object sender, EventArgs e)
         {
-            PlanCalendar f2 = new PlanCalendar(); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
+            PlanCalendar f2 = new PlanCalendar(isadmin, ismoderator, isviewer); //Form2 - название формы, КОТОРАЯ откроется, f2 - переменная, краткое название формы для обращения к ней
             this.Hide(); //второй вариант скрытия текущей формы
             f2.ShowDialog(); //запуск второй формы. Дальнейший код не сработает, пока не закроется форма
             this.Visible = true; //показать форму

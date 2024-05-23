@@ -94,8 +94,8 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(61, 68);
+            this.pictureBox1.Image = global::WindowsFormsApp4.Properties.Resources.hqczcgSBt8w__1_;
+            this.pictureBox1.Location = new System.Drawing.Point(61, 64);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(200, 152);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -140,7 +140,7 @@
             this.iconButton1.IconColor = System.Drawing.Color.DarkGray;
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton1.IconSize = 30;
-            this.iconButton1.Location = new System.Drawing.Point(267, 6);
+            this.iconButton1.Location = new System.Drawing.Point(273, 6);
             this.iconButton1.Name = "iconButton1";
             this.iconButton1.Size = new System.Drawing.Size(30, 27);
             this.iconButton1.TabIndex = 7;
@@ -151,7 +151,7 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Location = new System.Drawing.Point(-238, 12);
+            this.panel1.Location = new System.Drawing.Point(-232, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(30, 27);
             this.panel1.TabIndex = 8;
@@ -165,7 +165,7 @@
             this.iconButton2.IconColor = System.Drawing.Color.DarkGray;
             this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton2.IconSize = 30;
-            this.iconButton2.Location = new System.Drawing.Point(239, 3);
+            this.iconButton2.Location = new System.Drawing.Point(245, 3);
             this.iconButton2.Name = "iconButton2";
             this.iconButton2.Size = new System.Drawing.Size(22, 27);
             this.iconButton2.TabIndex = 8;
@@ -183,6 +183,7 @@
             this.label1.Size = new System.Drawing.Size(192, 15);
             this.label1.TabIndex = 17;
             this.label1.Text = "Журнал классного руководителя";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // panel2
             // 
@@ -193,14 +194,15 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(309, 39);
+            this.panel2.Size = new System.Drawing.Size(315, 39);
             this.panel2.TabIndex = 18;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(309, 419);
+            this.ClientSize = new System.Drawing.Size(315, 419);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.guna2TextBox2);
@@ -208,6 +210,7 @@
             this.Controls.Add(this.guna2TextBox1);
             this.Controls.Add(this.guna2Button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.ShowIcon = false;

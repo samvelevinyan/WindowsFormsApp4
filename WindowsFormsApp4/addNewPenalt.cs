@@ -45,7 +45,8 @@ namespace WindowsFormsApp4
                     dataGridView2.CurrentRow.Selected = true;
                     zid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
                     sid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
-                    MessageBox.Show($"Вы выбрали запись №{zid} и студента №{sid} ");
+                    string sname = dataGridView2.Rows[e.RowIndex].Cells[2].Value.ToString();
+                    MessageBox.Show($"Вы выбрали студента {sname}");
                 }
             }
         }

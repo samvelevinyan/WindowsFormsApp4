@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -41,11 +42,14 @@ namespace WindowsFormsApp4
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                dataGridView1.CurrentRow.Selected = true;
-                parentid = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                MessageBox.Show("Вы выбрали родителя под номером: " + parentid);
+                if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView1.CurrentRow.Selected = true;
+                    parentid = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
+                    MessageBox.Show("Вы выбрали родителя под номером: " + parentid);
+                }
             }
         }
 

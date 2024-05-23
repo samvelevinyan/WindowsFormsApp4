@@ -46,7 +46,8 @@ namespace WindowsFormsApp4
                     dataGridView2.CurrentRow.Selected = true;
                     sid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
                     zid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
-                    MessageBox.Show($"Вы выбрали группу №{sid} и запись №{zid}");
+                    string gnamee = dataGridView2.Rows[e.RowIndex].Cells[2].Value.ToString();
+                    MessageBox.Show($"Вы выбрали группу {gnamee}");
                 }
             }
         }

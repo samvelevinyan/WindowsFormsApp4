@@ -36,7 +36,9 @@ namespace WindowsFormsApp4
             SelectM = new Class1(connectionString);
             gName = receivedData;
 
-            dataGridView1.DataSource = SelectM.GetStudentsByGroup(gName);
+            //  dataGridView1.DataSource = SelectM.GetStudentsByGroup(gName);
+            SelectM.GetStudentsByGroup(dataGridView1, gName);
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
         }
 
@@ -62,17 +64,22 @@ namespace WindowsFormsApp4
             UpdateMcs.UpdateStudentInfos(studentid, guna2TextBox1.Text, guna2TextBox2.Text, guna2TextBox3.Text, guna2DateTimePicker1.Value, combobox, guna2TextBox7.Text, guna2TextBox6.Text, guna2TextBox5.Text, guna2TextBox4.Text);
 
             studentid = 0;
-            dataGridView1.DataSource = SelectM.GetStudentsByGroup(gName);
+            // dataGridView1.DataSource = SelectM.GetStudentsByGroup(gName);
+            SelectM.GetStudentsByGroup(dataGridView1, gName);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                dataGridView1.CurrentRow.Selected = true;
-                studentid = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                MessageBox.Show("Вы выбрали студента под номером: " + studentid);
+                if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    dataGridView1.CurrentRow.Selected = true;
+                    studentid = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
+                    MessageBox.Show("Вы выбрали студента под номером: " + studentid);
+                }
             }
+            
         }
 
         private void guna2Button2_Click(object sender, EventArgs e)
@@ -116,12 +123,14 @@ namespace WindowsFormsApp4
         {
             DialogResult result = MessageBox.Show($"Вы точно хотите удалить студента под номером {studentid}?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
+
             // Проверяем, какая кнопка была нажата
             if (result == DialogResult.Yes)
             {
 
                 DeleteM.RemoveStudent(studentid);
-                dataGridView1.DataSource = SelectM.GetStudentsByGroup(gName);
+                //  dataGridView1.DataSource = SelectM.GetStudentsByGroup(gName);
+                SelectM.GetStudentsByGroup(dataGridView1, gName);
             }
             else
             {

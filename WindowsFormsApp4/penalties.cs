@@ -21,7 +21,7 @@ namespace WindowsFormsApp4
 
         private int studentid;
         private int zapisid;
-        public penalties()
+        public penalties(bool isadmin, bool ismoderator, bool isviewer)
         {
             InitializeComponent();
             db = new DB();
@@ -30,9 +30,15 @@ namespace WindowsFormsApp4
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
             SelectM.LoadYears(guna2ComboBox1);
+
+            if (isadmin == false || ismoderator == false)
+            {
+                guna2Button3.Enabled = false;
+
+            }
         }
 
-       
+
 
         private void guna2ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -82,7 +88,8 @@ namespace WindowsFormsApp4
         {
             if (zapisid <= 0)
             {
-                MessageBox.Show("Выберите номер запси в таблице!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Выберите запись в таблице!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             addNewPenalt addNewPenalt = new addNewPenalt(zapisid, studentid);
             addNewPenalt.ShowDialog();
@@ -98,7 +105,8 @@ namespace WindowsFormsApp4
                     dataGridView2.CurrentRow.Selected = true;
                     zapisid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
                     studentid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
-                    MessageBox.Show($"Вы выбрали запись №{zapisid} и студента №{studentid} ");
+                    string sname = dataGridView2.Rows[e.RowIndex].Cells[2].Value.ToString();
+                    MessageBox.Show($"Вы выбрали студента {sname}");
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace WindowsFormsApp4
 
         int sid;
         int zid;
-        public IndividualWork()
+        public IndividualWork(bool isadmin, bool ismoderator, bool isviewer)
         {
             InitializeComponent();
             db = new DB();
@@ -31,9 +31,15 @@ namespace WindowsFormsApp4
             UpdateMcs = new UpdateMcs(connectionString);
             DeleteM = new DeleteM(connectionString);
             SelectM.LoadYears(guna2ComboBox1);
+
+            if (isadmin == false || ismoderator == false)
+            {
+                guna2Button3.Enabled = false;
+
+            }
         }
 
-       
+
         private void guna2ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -85,7 +91,8 @@ namespace WindowsFormsApp4
                     dataGridView2.CurrentRow.Selected = true;
                     sid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value);
                     zid = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[0].Value);
-                    MessageBox.Show($"Вы выбрали студента №{sid} и запись №{zid}");
+                    string sname = dataGridView2.Rows[e.RowIndex].Cells[2].Value.ToString();
+                    MessageBox.Show($"Вы выбрали студента {sname}");
                 }
             }
         }

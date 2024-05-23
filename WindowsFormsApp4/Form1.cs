@@ -23,7 +23,10 @@ namespace WindowsFormsApp4
             connectionString = db.connectionString;
         }
 
-       
+        bool dragging = false;
+        Point dragCursorPoint;
+        Point dragFormPoint;
+
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
@@ -75,6 +78,16 @@ namespace WindowsFormsApp4
         private void iconButton1_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
