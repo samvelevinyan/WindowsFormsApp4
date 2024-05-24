@@ -38,8 +38,10 @@ namespace WindowsFormsApp4
 
             if (personalData.IsAdmin == false || personalData.IsViewer == false)
             {
-                 guna2Button5.Enabled = false;
+                guna2Button5.Enabled = false;
             }
+
+           
         }
 
         private void guna2Button1_Click(object sender, EventArgs e)
